@@ -1,0 +1,84 @@
+// バージョン3を利用する
+syntax = "proto3";
+
+// 生成コードの格納先パッケージを指定する
+option go_package = "/infrastructure/pb";
+
+// error.protoのインポート
+import "proto/error.proto";
+
+// パッケージの宣言
+package proto;
+
+//*****
+// パラメータメッセージの定義
+//*****
+message CategoryParam {
+    optional string id = 1; // 商品カテゴリId
+}
+
+//*****
+// カテゴリ検索結果メッセージの定義   
+//*****
+message Category{
+    string id   = 1;    // 商品カテゴリId
+    string name = 2;    // 商品カテゴリ名
+}
+
+//*****
+// 検索結果メッセージの定義
+//*****
+message CategoryResult{
+    // エラーか検索結果のいずれかを返す
+    oneof result {
+        Category    category = 1;   // 検索結果 
+        Error       error    = 2;   // 検索エラー
+    }
+}
+
+//*****
+// 商品カテゴリ一覧メッセージの定義
+//*****
+message CategoriesResult {
+    repeated Category   categories = 1; // 一覧
+    optional Error      error = 2;      // エラー
+}
+
+//*****
+//パラメータメッセージの定義
+//*****
+message CategoryUpParam {
+    optional string id      = 1; // 商品カテゴリ番号
+    optional string name    = 2; // 商品カテゴリ名
+}
+
+//*****
+//処理結果メッセージ
+//*****
+message CategoryUpResult {
+    optional CategoryUpParam param = 1; // リクエストパラメータ
+    optional Error error = 2;   // エラー
+}
+
+
+// *****
+// カテゴリサービスの定義
+// *****
+service CategoryService {
+    // すべてのカテゴリを取得して返す
+    rpc List(CategoryParam)   returns (CategoriesResult);
+    // 指定されたIDのカテゴリを取得して返す
+    rpc ById(CategoryParam) returns (CategoryResult);
+}
+
+// *****
+// カテゴリサービスの定義
+// *****
+service CategoryUpService {
+    // 商品カテゴリを追加した結果を返す
+    rpc Create(CategoryUpParam) returns(CategoryUpResult);
+    // 商品カテゴリを更新した結果を返す
+    rpc Update(CategoryUpParam) returns(CategoryUpResult);
+    // 商品カテゴリを削除した結果を返す
+    rpc Delete(CategoryUpParam) returns(CategoryUpResult);
+}

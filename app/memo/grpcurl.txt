@@ -1,0 +1,22 @@
+QueryService確認コマンド
+grpcurl -plaintext queryservice:8083 list
+grpcurl -plaintext queryservice:8083 list proto.CategoryService
+grpcurl -plaintext queryservice:8083 proto.CategoryService.List
+grpcurl -plaintext -d '{"id": "b1524011-b6af-417e-8bf2-f449dd58b5c0"}' queryservice:8083 proto.CategoryService.ById
+grpcurl -plaintext -d '{"id": "b1524011-b6af-417e-8bf2-f449dd58b5c1"}' queryservice:8083 proto.CategoryService.ById
+
+grpcurl -plaintext queryservice:8083 proto.ProductService.List
+grpcurl -plaintext -d '{"keyword": "ペン"}' queryservice:8083 proto.ProductService.ByKeyword
+grpcurl -plaintext -d '{"id": "ac413f22-0cf1-490a-9635-7e9ca810e544"}' queryservice:8083 proto.ProductService.ById
+
+CommandService確認コマンド
+grpcurl -plaintext commandservice:8082 list
+grpcurl -plaintext commandservice:8082 list proto.ProductUpService
+grpcurl -plaintext commandservice:8082 list proto.CategoryUpService
+grpcurl -plaintext -d '{"name": "食品"}' commandservice:8082 proto.CategoryUpService.Create
+grpcurl -plaintext -d '{"id": "2525e527-b8ab-4f20-adf8-d6ca5f83625b" , "name": "食品!!!"}' commandservice:8082 proto.CategoryUpService.Update
+grpcurl -plaintext -d '{"id": "2525e527-b8ab-4f20-adf8-d6ca5f83625b"}' commandservice:8082 proto.CategoryUpService.Delete
+
+grpcurl -plaintext -d '{"name": "商品-XYZ","price":"300","category_id":"762bd1ea-9700-4bab-a28d-6cbebf20ddc2"}' commandservice:8082 proto.ProductUpService.Create
+grpcurl -plaintext -d '{"id":"a98bc347-aa3c-4041-8391-50bab9cb62c7" , "name": "商品-XYZ!!!","price":"500","category_id":"762bd1ea-9700-4bab-a28d-6cbebf20ddc2"}' commandservice:8082 proto.ProductUpService.Update
+grpcurl -plaintext -d '{"id":"a98bc347-aa3c-4041-8391-50bab9cb62c7"}' commandservice:8082 proto.ProductUpService.Delete

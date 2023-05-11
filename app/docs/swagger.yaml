@@ -1,0 +1,401 @@
+basePath: /
+definitions:
+  dto.CategoryDTO:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.ProductDTO:
+    properties:
+      categoryId:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+    type: object
+  pb.Category:
+    properties:
+      id:
+        description: 商品カテゴリId
+        type: string
+      name:
+        description: 商品カテゴリ名
+        type: string
+    type: object
+  pb.CategoryUpParam:
+    properties:
+      id:
+        description: 商品カテゴリ番号
+        type: string
+      name:
+        description: 商品カテゴリ名
+        type: string
+    type: object
+  pb.CategoryUpResult:
+    properties:
+      error:
+        allOf:
+        - $ref: '#/definitions/pb.Error'
+        description: エラー
+      param:
+        allOf:
+        - $ref: '#/definitions/pb.CategoryUpParam'
+        description: リクエストパラメータ
+    type: object
+  pb.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  pb.Product:
+    properties:
+      id:
+        description: 商品Id
+        type: string
+      name:
+        description: 商品名
+        type: string
+      price:
+        description: 単価
+        type: integer
+    type: object
+  pb.ProductUpParam:
+    properties:
+      category_id:
+        description: カテゴリ番号
+        type: string
+      id:
+        description: 商品番号
+        type: string
+      name:
+        description: 商品名
+        type: string
+      price:
+        description: 単価
+        type: integer
+    type: object
+  pb.ProductUpResult:
+    properties:
+      error:
+        allOf:
+        - $ref: '#/definitions/pb.Error'
+        description: エラー
+      param:
+        allOf:
+        - $ref: '#/definitions/pb.ProductUpParam'
+        description: リクエストパラメータ
+    type: object
+host: localhost:8081
+info:
+  contact:
+    email: furukawa@fullness.co.jp
+    name: 株式会社フルネス
+    url: https://www.fullness.co.jp
+  description: 商品カテゴリ情報と商品情報を管理するAPIサービス
+  title: gRPCサンプルプログラム(CQRSサービス)
+  version: "1.0"
+paths:
+  /category/add:
+    post:
+      consumes:
+      - application/json
+      description: 商品カテゴリを登録する
+      operationId: add-category
+      parameters:
+      - description: name(カテゴリ名)
+        in: body
+        name: newcategory
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CategoryDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.CategoryUpResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品カテゴリを登録する
+  /category/byid/{id}:
+    get:
+      consumes:
+      - '*/*'
+      description: 指定されたカテゴリ番号の商品カテゴリを取得する
+      operationId: get-category-by-id
+      parameters:
+      - description: id(カテゴリ番号)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.Category'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品カテゴリを取得する
+  /category/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 商品カテゴリを削除する
+      operationId: delete-category
+      parameters:
+      - description: カテゴリ番号,カテゴリ名
+        in: body
+        name: newcategory
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CategoryDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.CategoryUpResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品カテゴリを削除する
+  /category/list:
+    get:
+      consumes:
+      - '*/*'
+      description: すべての商品カテゴリを取得する
+      operationId: get-categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.Category'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品カテゴリを取得する
+  /category/update:
+    put:
+      consumes:
+      - application/json
+      description: 商品カテゴリを変更する
+      operationId: update-category
+      parameters:
+      - description: カテゴリ番号,カテゴリ名
+        in: body
+        name: newcategory
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CategoryDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.CategoryUpResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品カテゴリを変更する
+  /product/add:
+    post:
+      consumes:
+      - application/json
+      description: 商品を登録する
+      operationId: add-product
+      parameters:
+      - description: name(商品名),price(単価),categoryId(商品カテゴリ番号)
+        in: body
+        name: newproduct
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProductDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.ProductUpResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品を登録する
+  /product/byid/{id}:
+    get:
+      consumes:
+      - '*/*'
+      description: 指定された商品番号の商品を取得する
+      operationId: get-product-by-id
+      parameters:
+      - description: id(商品番号)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品を取得する
+  /product/bykeyword/{keyword}:
+    get:
+      consumes:
+      - '*/*'
+      description: 指定されたキーワードが含まれる商品を取得する
+      operationId: get-product-by-keyword
+      parameters:
+      - description: キーワード
+        in: path
+        name: keyword
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品を取得する
+  /product/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 商品を削除する
+      operationId: delete-product
+      parameters:
+      - description: 商品番号
+        in: body
+        name: deleteproduct
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProductDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.ProductUpResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品を削除する
+  /product/list:
+    get:
+      consumes:
+      - '*/*'
+      description: すべての商品を取得する
+      operationId: get-products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品を取得する
+  /product/update:
+    put:
+      consumes:
+      - application/json
+      description: 商品を変更する
+      operationId: update-product
+      parameters:
+      - description: id(商品番号),name(商品名),price(単価),categoryId(商品カテゴリ番号)
+        in: body
+        name: updateproduct
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProductDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.ProductUpResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.Error'
+      summary: 商品を変更する
+swagger: "2.0"

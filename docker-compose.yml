@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  cqrs-client:
+    container_name: client
+    build: .
+    tty: true
+    volumes:
+      - ./app:/go/src/app
+    ports:
+      - 8081:8081
+    networks:
+      - external
+networks:
+  external:
+    name: grpc_sampledb_net
