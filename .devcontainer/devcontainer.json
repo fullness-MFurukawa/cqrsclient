@@ -1,0 +1,20 @@
+{
+    "name": "SampleProgram Client" ,
+    "dockerComposeFile":[
+        "../docker-compose.yml"
+    ],
+    "service":"cqrsclinet",
+    "workspaceFolder": "/go/src/client",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.go"       
+            ],
+            "settings": {
+                "go.gopath": "/go" ,
+                "go.inferGopath": true ,
+                "go.useLanguageServer": true
+            }
+        }
+    }
+}

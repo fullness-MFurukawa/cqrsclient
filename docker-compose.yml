@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  cqrsclinet:
+    container_name: cqrs-client
+    build: .
+    tty: true
+    volumes:
+      - ./app:/go/src/client
+    ports:
+      - 8081:8081
+    networks:
+      - external
+networks:
+  external:
+    name: sampledb_net
+    external: true
