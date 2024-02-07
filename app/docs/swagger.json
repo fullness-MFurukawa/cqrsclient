@@ -1,0 +1,651 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "カテゴリ情報と商品情報を管理するAPIサービス",
+        "title": "gRPCサンプルプログラム(CQRSサービス)",
+        "contact": {
+            "name": "株式会社フルネス",
+            "url": "https://www.fullness.co.jp",
+            "email": "furukawa@fullness.co.jp"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8081",
+    "basePath": "/",
+    "paths": {
+        "/category/add": {
+            "post": {
+                "description": "新しいカテゴリを登録する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "カテゴリ"
+                ],
+                "summary": "登録する",
+                "operationId": "add-category",
+                "parameters": [
+                    {
+                        "description": "crud:1(更新種別),name(カテゴリ名)",
+                        "name": "newcategory",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pb.CategoryUpParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/category/byid/{id}": {
+            "get": {
+                "description": "指定されたカテゴリIDのカテゴリを取得する",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "カテゴリ"
+                ],
+                "summary": "取得する",
+                "operationId": "get-category-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id(カテゴリID)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Category"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/category/delete": {
+            "delete": {
+                "description": "指定された識別子でカテゴリを削除する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "カテゴリ"
+                ],
+                "summary": "削除する",
+                "operationId": "delete-category",
+                "parameters": [
+                    {
+                        "description": "crud:3(更新種別),id(カテゴリID)",
+                        "name": "deletecategory",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pb.CategoryUpParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/category/list": {
+            "get": {
+                "description": "カテゴリ一覧を取得する",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "カテゴリ"
+                ],
+                "summary": "一覧を取得する",
+                "operationId": "get-categories",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Category"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/category/update": {
+            "put": {
+                "description": "指定された識別子のカテゴリを変更する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "カテゴリ"
+                ],
+                "summary": "変更する",
+                "operationId": "update-category",
+                "parameters": [
+                    {
+                        "description": "crud:2(更新種別),id(カテゴリID),name(カテゴリ名)",
+                        "name": "updatecategory",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pb.CategoryUpParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/add": {
+            "post": {
+                "description": "新商品を登録する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "登録する",
+                "operationId": "add-product",
+                "parameters": [
+                    {
+                        "description": "crud:1(更新種別),name(商品名),price(単価),categoryId(商品カテゴリ番号)",
+                        "name": "newproduct",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pb.ProductUpParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/byid/{id}": {
+            "get": {
+                "description": "指定された商品IDの商品を取得する",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "取得する",
+                "operationId": "get-product-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id(商品ID)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Product"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/bykeyword/{keyword}": {
+            "get": {
+                "description": "指定されたキーワードが含まれる商品を取得する",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "取得する",
+                "operationId": "get-product-by-keyword",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "キーワード",
+                        "name": "keyword",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Product"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/delete": {
+            "delete": {
+                "description": "指定された識別子で商品を削除する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "削除する",
+                "operationId": "delete-product",
+                "parameters": [
+                    {
+                        "description": "crud:3(更新種別),id(商品ID)",
+                        "name": "deleteproduct",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pb.ProductUpParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/list": {
+            "get": {
+                "description": "商品一覧を取得する",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "一覧を取得する",
+                "operationId": "get-products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Product"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/liststream": {
+            "get": {
+                "description": "商品一覧を取得する",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "一覧を取得する(Server streaming RPC)",
+                "operationId": "get-productstream",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/pb.Product"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/update": {
+            "put": {
+                "description": "指定された識別子の商品を変更する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "変更する",
+                "operationId": "update-product",
+                "parameters": [
+                    {
+                        "description": "crud:2(更新種別),id(商品ID),name(商品名),price(単価),categoryId(商品カテゴリ番号)",
+                        "name": "updateproduct",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pb.ProductUpParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/pb.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "pb.CRUD": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "x-enum-comments": {
+                "CRUD_DELETE": "削除",
+                "CRUD_INSERT": "追加",
+                "CRUD_UNKNOWN": "不明",
+                "CRUD_UPDATE": "変更"
+            },
+            "x-enum-varnames": [
+                "CRUD_UNKNOWN",
+                "CRUD_INSERT",
+                "CRUD_UPDATE",
+                "CRUD_DELETE"
+            ]
+        },
+        "pb.Category": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "カテゴリ番号",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "カテゴリ名",
+                    "type": "string"
+                }
+            }
+        },
+        "pb.CategoryUpParam": {
+            "type": "object",
+            "properties": {
+                "crud": {
+                    "description": "更新の種類",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/pb.CRUD"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "商品カテゴリ番号",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "商品カテゴリ名",
+                    "type": "string"
+                }
+            }
+        },
+        "pb.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "エラーメッセージ",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "エラー種別",
+                    "type": "string"
+                }
+            }
+        },
+        "pb.Product": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "description": "商品カテゴリ",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/pb.Category"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "商品Id",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "商品名",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "単価",
+                    "type": "integer"
+                }
+            }
+        },
+        "pb.ProductUpParam": {
+            "type": "object",
+            "properties": {
+                "categoryId": {
+                    "description": "商品カテゴリ番号",
+                    "type": "string"
+                },
+                "crud": {
+                    "description": "更新の種類",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/pb.CRUD"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "商品番号",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "商品名",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "単価",
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
